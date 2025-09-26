@@ -2,8 +2,10 @@ export interface SampleSummary {
 	sampleId: number;
 	count: number;
 	startedAt: string | null;
+	tagName: string | null;
+	tagId: number;
 	endedAt: string | null;
-	sentAt: string | null;
+	sentAt: string;
 	durationSec: number | null;
 	avgTemp?: number | null;
 	avgHumidity?: number | null;
@@ -11,6 +13,12 @@ export interface SampleSummary {
 	areaMq136?: number | null;
 	areaMq137?: number | null;
 	areaMq138?: number | null;
+	areaMq135Corr?: number | null;
+	areaMq136Corr?: number | null;
+	areaMq137Corr?: number | null;
+	areaMq138Corr?: number | null;
+	spoiled: boolean;
+	spoilProb: number;
 }
 
 export interface SamplePoint {

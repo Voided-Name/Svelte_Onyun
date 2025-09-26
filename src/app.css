@@ -1,5 +1,6 @@
 @import 'tailwindcss';
-
+@import 'katex/dist/katex.min.css';
+@source '../node_modules/layerchart/dist';
 @import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
@@ -29,6 +30,11 @@
 	--chart-3: oklch(0.5679 0.2113 276.7065);
 	--chart-4: oklch(0.6356 0.1922 281.8054);
 	--chart-5: oklch(0.4509 0.1758 279.3838);
+	--chart-6: oklch(0.65 0.18 150); /* green-teal */
+	--chart-7: oklch(0.68 0.19 90); /* fresh lime */
+	--chart-8: oklch(0.72 0.17 40); /* golden yellow */
+	--chart-9: oklch(0.58 0.2 20); /* warm orange */
+	--chart-10: oklch(0.55 0.18 350); /* magenta-red */
 	--sidebar: oklch(0.958 0.0133 286.1454);
 	--sidebar-foreground: oklch(0.3015 0.0572 282.4176);
 	--sidebar-primary: oklch(0.5417 0.179 288.0332);

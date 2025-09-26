@@ -3,7 +3,12 @@ import { API_URL } from '$env/static/private';
 import { error, redirect } from '@sveltejs/kit';
 import type { Device } from '$lib/types/device';
 
-export const load: PageServerLoad = async ({ fetch }) => {
+export const load: PageServerLoad = async ({ fetch, locals }) => {
+	if (!locals.user) throw redirect(303, '/auth/login');
+
+	const canView = locals.permissions.has('device:view') || locals.permissions.has('device:manage');
+	if (!canView) throw error(403, 'Forbidden');
+
 	const response = await fetch(`${API_URL}/device/view`);
 
 	if (!response.ok) {
@@ -15,5 +20,10 @@ export const load: PageServerLoad = async ({ fetch }) => {
 
 	console.log('Devices: ', devices);
 
-	return { devices, apiUrl: API_URL };
+	return {
+		userId: locals.user.userId,
+		devices,
+		apiUrl: API_URL,
+		permissions: Array.from(locals.permissions)
+	};
 };

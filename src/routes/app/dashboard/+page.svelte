@@ -1,11 +1,20 @@
 <script lang="ts">
-	import type { PageLoad } from './$types';
+	import { type SampleSummary } from '$lib/types/onion';
+	import Charts from '$lib/components/bar-chart.svelte';
+	import type { Tag } from '$lib/types/tag';
 
-	export const load: PageLoad = () => ({
-		breadcrumbs: [
-			{ label: 'Dashboard' } // last item is the current page; omit href
-		]
-	});
+	interface PageData {
+		apiUrl: string;
+		items: SampleSummary[];
+		breadcrumbs: any[];
+		tags: Tag[];
+	}
+
+	let { data }: { data?: PageData } = $props();
 </script>
 
-Dashboard
+<div class="m-5">
+	{#if data?.items}
+		<Charts {data} />
+	{/if}
+</div>

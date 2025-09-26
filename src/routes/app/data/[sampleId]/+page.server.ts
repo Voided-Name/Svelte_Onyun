@@ -17,6 +17,9 @@ export const load: PageServerLoad = async ({ fetch, params }) => {
 		throw error(res.status, msg);
 	}
 
+	const res2 = await fetch(`${API_URL}/onions/area/${id}`, { cache: 'no-store' });
+	const areas = await res2.json();
+
 	const detail: SampleDetail = await res.json();
-	return { apiUrl: API_URL, detail, sampleId: id };
+	return { apiUrl: API_URL, detail, sampleId: id, areas: areas.items[0] };
 };

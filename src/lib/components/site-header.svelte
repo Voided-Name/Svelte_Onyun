@@ -6,7 +6,7 @@
 	import { Separator } from '$lib/components/ui/separator/index.js';
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
 
-	export let breadcrumbs: any[] = [];
+	let { breadcrumbs }: { breadcrumbs: any[] } = $props();
 	const sidebar = Sidebar.useSidebar();
 </script>
 

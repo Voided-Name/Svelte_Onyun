@@ -1,11 +1,14 @@
 import { API_URL } from '$env/static/private';
 import type { RequestHandler } from './$types';
 import { page } from '$app/state';
-import { redirect } from '@sveltejs/kit';
+import { redirect, error } from '@sveltejs/kit';
 
 let userId = page.data.userId;
 
-export const PATCH: RequestHandler = async ({ request }) => {
+export const PATCH: RequestHandler = async ({ request, locals }) => {
+	if (!locals.user) throw error(401, 'Unauthorized');
+	if (!locals.permissions.has('account:manage')) throw error(403, 'Forbidden');
+
 	const payload = await request.json();
 
 	if (!userId) {

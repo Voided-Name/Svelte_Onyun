@@ -5,7 +5,7 @@ export const load: PageLoad = async ({ parent, data, params }) => {
 	return {
 		...data,
 		breadcrumbs: [
-			{ label: 'Onion Samples', href: '/onion' },
+			{ label: 'Onion Samples', href: '/app/data' },
 			{ label: `Sample ${params.sampleId}`, href: `/onion/${params.sampleId}` }
 		]
 	};

@@ -7,6 +7,8 @@
 	import { onMount } from 'svelte';
 	import { toast } from 'svelte-sonner';
 
+	$inspect(page.data.breadcrumbs);
+
 	let interval: number;
 	onMount(() => {
 		interval = window.setInterval(async () => {
@@ -40,7 +42,7 @@
 	<Sidebar.Provider class="flex flex-col">
 		<SiteHeader breadcrumbs={page.data.breadcrumbs ?? []} />
 		<div class="flex flex-1">
-			<AppSidebar />
+			<AppSidebar items={page.data.nav} />
 			<Sidebar.Inset>
 				<slot />
 			</Sidebar.Inset>

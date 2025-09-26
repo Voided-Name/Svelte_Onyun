@@ -1,46 +1,57 @@
-import { authenticateRequest } from '$lib/auth/jwt';
-import { clearAuthCookies } from '$lib/auth/jwt';
+// src/hooks.server.ts
+import { authenticateRequest, clearAuthCookies } from '$lib/auth/jwt';
+import { permsFor, type Role, type Perm } from '$lib/auth/acl';
 import type { Handle, HandleFetch } from '@sveltejs/kit';
 import type { JwtPayload } from '$lib/auth/jwt';
+
+type AuthUser = Omit<JwtPayload, 'iat' | 'exp' | 'role'> & { role?: Role };
 
 declare global {
 	namespace App {
 		interface Locals {
-			user?: Omit<JwtPayload, 'iat' | 'exp'>;
+			user?: AuthUser;
+			permissions: Set<Perm>;
+		}
+		interface PageData {
+			user?: AuthUser;
+			permissions?: Perm[]; // serialized to client in +layout.server.ts if needed
 		}
 	}
 }
 
+function toRole(value: unknown): Role | undefined {
+	return value === 'admin' || value === 'regular' ? value : undefined;
+}
+
 export const handle: Handle = async ({ event, resolve }) => {
 	const { cookies, url } = event;
-	const publicRoutes = ['/auth/signup', '/auth/logout', '/auth/login'];
 
-	const isPublicRoute = publicRoutes.some(
-		(route) => url.pathname === route || url.pathname.startsWith('/api/public/')
-	);
+	const publicRoutes = ['/auth/signup', '/auth/logout', '/auth/login'];
+	const isPublicRoute =
+		publicRoutes.some((route) => url.pathname === route) || url.pathname.startsWith('/api/public/');
 
 	const authResult = authenticateRequest(cookies);
 
 	if (authResult.success && authResult.user) {
-		event.locals.user = authResult.user;
+		const role = toRole(authResult.user.role);
+		const user: AuthUser = { ...authResult.user, role };
 
-		if (!cookies.get('user')) {
-			cookies.set('user', JSON.stringify(authResult.user), {
-				path: '/',
-				httpOnly: true
-			});
-		}
+		event.locals.user = user;
+		event.locals.permissions = permsFor(role);
 
+		// Redirect authenticated users away from public auth pages and root
 		if (isPublicRoute && url.pathname !== '/auth/logout') {
 			return Response.redirect(new URL('/app/dashboard', url));
-		} else if (url.pathname == '/') {
+		}
+		if (url.pathname === '/') {
 			return Response.redirect(new URL('/app/dashboard', url));
 		}
 	} else {
-		if (!isPublicRoute) {
-			clearAuthCookies(cookies);
-			return Response.redirect(new URL('/auth/login', url));
-		} else if (url.pathname == '/') {
+		// Unauthenticated: clear, zero permissions, and gate non-public routes
+		event.locals.user = undefined;
+		event.locals.permissions = new Set<Perm>();
+
+		if (!isPublicRoute || url.pathname === '/') {
 			clearAuthCookies(cookies);
 			return Response.redirect(new URL('/auth/login', url));
 		}

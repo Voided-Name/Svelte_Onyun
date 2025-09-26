@@ -6,7 +6,7 @@ export const COOKIE_OPTIONS = {
 	httpOnly: true,
 	secure: !dev,
 	sameSite: 'strict' as const,
-	maxAge: 60 * 60
+	maxAge: 3 * 60 * 60
 };
 
 export const setAuthCookie = (cookies: Cookies, accessToken: string): void => {

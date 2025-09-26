@@ -19,6 +19,12 @@ interface LoginResponse {
 	};
 }
 
+export const load = async ({ cookies }) => {
+	const flash = cookies.get('flash');
+	if (flash) cookies.delete('flash', { path: '/' });
+	return { flash };
+};
+
 export const actions = {
 	default: async ({ request, cookies }) => {
 		const formData = await request.formData();

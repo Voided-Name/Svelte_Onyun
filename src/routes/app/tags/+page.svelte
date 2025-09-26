@@ -1,62 +1,10 @@
-<script>
-	import { Grid } from '@svar-ui/svelte-grid';
-	import { Willow } from '@svar-ui/svelte-grid';
+<script lang="ts">
+	import DataTable from './data-table.svelte';
+	import { columns } from './columns';
 
-	const data = [
-		{
-			id: 1,
-			city: 'Amieshire',
-			email: 'Leora13@yahoo.com',
-			firstName: 'Ernest',
-			lastName: 'Schuppe',
-			companyName: 'Lebsack - Nicolas'
-		},
-		{
-			id: 2,
-			city: 'Gust',
-			email: 'Mose_Gerhold51@yahoo.com',
-			firstName: 'Janis',
-			lastName: 'Vandervort',
-			companyName: 'Glover - Hermiston'
-		}
-	];
-
-	const columns = [
-		{
-			id: 'id',
-			width: 50
-		},
-		{
-			id: 'city',
-			width: 100,
-			header: 'City',
-			footer: 'City'
-		},
-		{
-			id: 'firstName',
-			header: 'First Name',
-			footer: 'First Name',
-			width: 150
-		},
-		{
-			id: 'lastName',
-			header: 'Last Name',
-			footer: 'Last Name',
-			width: 150
-		},
-		{
-			id: 'email',
-			header: 'Email',
-			footer: 'Email'
-		},
-		{
-			id: 'companyName',
-			header: 'Company',
-			footer: 'Company'
-		}
-	];
+	let { data } = $props();
 </script>
 
-<Willow>
-	<Grid {data} {columns} />
-</Willow>
+<div class="m-5">
+	<DataTable data={data.items} {columns} />
+</div>

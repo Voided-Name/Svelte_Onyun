@@ -29,17 +29,24 @@
 				<h1 class="text-xl font-bold">Welcome to ONYUN</h1>
 				<div class="text-center text-sm">
 					Don&apos;t have an account?
-					<a href="/signup" class="underline underline-offset-4"> Sign up </a>
+					<a href="/auth/signup" class="underline underline-offset-4"> Sign up </a>
 				</div>
 			</div>
 			<div class="flex flex-col gap-6">
 				<div class="grid gap-3">
 					<Label for="email">Email</Label>
-					<Input id="email" type="email" name="email" placeholder="m@example.com" required />
+					<Input
+						id="email"
+						type="email"
+						name="email"
+						placeholder="m@example.com"
+						required
+						class="bg-card"
+					/>
 				</div>
 				<div class="grid gap-3">
 					<Label for="password">Password</Label>
-					<Input id="password" type="password" name="password" required />
+					<Input id="password" type="password" name="password" required class="bg-card" />
 				</div>
 				{#if form?.issues}
 					<ZodIssues issues={form.issues} />
