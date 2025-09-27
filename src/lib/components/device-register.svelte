@@ -12,12 +12,11 @@
 
 	let isOpen = $state(false);
 	let displayName = $state('');
-	let sensorModel = $state('');
 	let locationTag = $state('');
 	let description = $state('');
 	let expiryDays = $state('90');
 
-	let disabled = $derived(!displayName || !sensorModel || !locationTag);
+	let disabled = $derived(!displayName || !locationTag);
 
 	let showAlert = $state(false);
 	let deviceData = $state<{ publicId: string; apiKey: string } | null>(null);
@@ -32,8 +31,7 @@
 					description: description,
 					locationTag: locationTag,
 					ttlDays: expiryDays,
-					userId: userId,
-					sensorModel: sensorModel
+					userId: userId
 				})
 			});
 
@@ -55,7 +53,6 @@
 		} finally {
 			isOpen = false;
 			displayName = '';
-			sensorModel = '';
 			locationTag = '';
 			description = '';
 			expiryDays = '90';
@@ -98,9 +95,7 @@
 			<Button onclick={() => deviceData && navigator.clipboard.writeText(deviceData.apiKey)}
 				>Copy</Button
 			>
-			<AlertDialog.Cancel>
-				<Button variant="secondary">Close</Button>
-			</AlertDialog.Cancel>
+			<AlertDialog.Cancel>Close</AlertDialog.Cancel>
 		</AlertDialog.Footer>
 	</AlertDialog.Content>
 </AlertDialog.Root>
@@ -117,11 +112,6 @@
 			<div class="grid gap-2">
 				<Label for="displayName">Display Name</Label>
 				<Input id="displayName" bind:value={displayName} />
-			</div>
-
-			<div class="grid gap-2">
-				<Label for="sensorModel">Sensor Model</Label>
-				<Input id="sensorModel" bind:value={sensorModel} />
 			</div>
 
 			<div class="grid gap-2">

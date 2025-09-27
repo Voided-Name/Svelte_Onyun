@@ -57,6 +57,8 @@ export const load: PageServerLoad = async ({ fetch, url, locals }) => {
 	if (!res.ok) throw error(res.status, 'Failed to load system logs');
 	const data = (await res.json()) as LogsResponse;
 
+	console.log(data.items);
+
 	return {
 		apiUrl: API_URL,
 		total: data.total ?? 0,

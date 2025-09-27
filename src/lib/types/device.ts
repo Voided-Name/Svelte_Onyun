@@ -5,7 +5,6 @@ export interface Device {
 	createdAt: Date;
 	isActive: boolean;
 	locationTag: string;
-	sensorModel: string;
 	status: number;
 	publicId: string;
 }

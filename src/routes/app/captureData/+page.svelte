@@ -139,7 +139,6 @@
 									? 'text-foreground'
 									: 'text-muted-foreground'}"
 							>
-								<p>Sensor: {d.sensorModel}</p>
 								<p>Loc: {d.locationTag}</p>
 								<p>Created: {d.createdAt}</p>
 								<p>Description: {d.description}</p>
