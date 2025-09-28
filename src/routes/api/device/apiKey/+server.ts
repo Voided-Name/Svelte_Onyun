@@ -1,14 +1,18 @@
 import { API_URL } from '$env/static/private';
 import type { RequestHandler } from './$types';
+import { page } from '$app/state';
 import { redirect, error } from '@sveltejs/kit';
 
 export const PATCH: RequestHandler = async ({ request, locals }) => {
-	console.log('patching');
 	if (!locals.user) throw error(401, 'Unauthorized');
-	if (!locals.permissions.has('account:manage')) throw error(403, 'Forbidden');
+	if (!locals.permissions.has('device:manage')) throw error(403, 'Forbidden');
 
 	const payload = await request.json();
 	const user = locals.user;
+
+	if (!user) {
+		throw redirect(303, `/auth/login`);
+	}
 
 	let userId = user.userId;
 
@@ -16,7 +20,7 @@ export const PATCH: RequestHandler = async ({ request, locals }) => {
 		throw redirect(303, `/auth/login`);
 	}
 
-	const res = await fetch(`${API_URL}/device/edit`, {
+	const res = await fetch(`${API_URL}/device/updateAPIkey`, {
 		method: 'PATCH',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(payload)

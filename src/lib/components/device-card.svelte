@@ -17,6 +17,10 @@
 	let isLoadingLight = $state(false);
 	let message = $state('');
 	let expiryDays = $state('90');
+	let isOpen = $state(false);
+	let showAlert = $state(false);
+	let showGenerate = $state(false);
+	let deviceData = $state<{ publicId: string; apiKey: string } | null>(null);
 
 	const triggerContent = $derived(
 		expiryDays === '30'
@@ -83,6 +87,77 @@
 			isLoadingCaptive = false;
 		}
 	}
+	// async function registerDevice() {
+	// 	try {
+	// 		const res = await fetch(`/api/device`, {
+	// 			method: 'POST',
+	// 			headers: { 'Content-Type': 'application/json' },
+	// 			body: JSON.stringify({
+	// 				displayName: displayName,
+	// 				description: description,
+	// 				locationTag: locationTag,
+	// 				ttlDays: expiryDays,
+	// 				userId: userId
+	// 			})
+	// 		});
+	//
+	// 		const data = await res.json();
+	// 		await invalidateAll();
+	//
+	// 		console.log(data);
+	// 		if (data.id) {
+	// 			deviceData = { publicId: data.publicId, apiKey: data.apiKey };
+	// 			showAlert = true;
+	// 		} else {
+	// 			if (data.error) {
+	// 				if (data.error.message) {
+	// 					toast.error(data.error.message);
+	// 				}
+	// 			}
+	// 		}
+	// 	} catch (error) {
+	// 	} finally {
+	// 		isOpen = false;
+	// 		displayName = '';
+	// 		locationTag = '';
+	// 		description = '';
+	// 		expiryDays = '90';
+	// 	}
+	// }
+
+	async function generateAPIKey(deviceId: number) {
+		try {
+			const res = await fetch(`/api/device/apiKey`, {
+				method: 'PATCH',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					deviceId: deviceId,
+					ttlDays: expiryDays,
+					userId: userId
+				})
+			});
+
+			const data = await res.json();
+			await invalidateAll();
+
+			console.log(data);
+			if (data.id) {
+				deviceData = { publicId: data.publicId, apiKey: data.apiKey };
+				showAlert = true;
+			} else {
+				if (data.error) {
+					if (data.error.message) {
+						toast.error(data.error.message);
+					}
+				}
+			}
+		} catch (error) {
+		} finally {
+			isOpen = false;
+			showGenerate = false;
+			expiryDays = '90';
+		}
+	}
 
 	async function deleteDevice(id: number) {
 		try {
@@ -111,6 +186,27 @@
 		} catch (error) {}
 	}
 </script>
+
+<AlertDialog.Root bind:open={showAlert}>
+	<AlertDialog.Content>
+		<AlertDialog.Header>
+			<AlertDialog.Title>API Key Generated</AlertDialog.Title>
+			<AlertDialog.Description>Please copy your API Key before closing.</AlertDialog.Description>
+		</AlertDialog.Header>
+
+		{#if deviceData}
+			<p><strong>Device ID:</strong> {deviceData.publicId}</p>
+			<p><strong>API Key:</strong> {deviceData.apiKey}</p>
+		{/if}
+
+		<AlertDialog.Footer>
+			<Button onclick={() => deviceData && navigator.clipboard.writeText(deviceData.apiKey)}
+				>Copy</Button
+			>
+			<AlertDialog.Cancel>Close</AlertDialog.Cancel>
+		</AlertDialog.Footer>
+	</AlertDialog.Content>
+</AlertDialog.Root>
 
 <Card.Root class="w-full max-w-sm">
 	<Card.Header>
@@ -156,7 +252,7 @@
 					onclick={() => triggerTestLight(device.publicId)}
 					disabled={isLoadingLight}>{isLoadingLight ? 'Loading...' : 'Test Light'}</Button
 				>
-				<AlertDialog.Root>
+				<AlertDialog.Root bind:open={showGenerate}>
 					<AlertDialog.Trigger>
 						<Button class="col-span-1" variant="secondary" size="icon"><Key /></Button>
 					</AlertDialog.Trigger>
@@ -183,8 +279,8 @@
 						<AlertDialog.Footer>
 							<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
 							<AlertDialog.Action
-								class={buttonVariants({ variant: 'destructive' })}
-								onclick={() => deleteDevice(device.id)}>Continue</AlertDialog.Action
+								class={buttonVariants({ variant: 'default' })}
+								onclick={() => generateAPIKey(device.id)}>Continue</AlertDialog.Action
 							>
 						</AlertDialog.Footer>
 					</AlertDialog.Content>

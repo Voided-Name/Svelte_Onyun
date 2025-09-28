@@ -36,6 +36,8 @@
 		}, 5_000); // every minute
 		return () => clearInterval(interval);
 	});
+
+	let { children } = $props();
 </script>
 
 <div class="[--header-height:calc(--spacing(14))]">
@@ -44,7 +46,7 @@
 		<div class="flex flex-1">
 			<AppSidebar items={page.data.nav} />
 			<Sidebar.Inset>
-				<slot />
+				{@render children?.()}
 			</Sidebar.Inset>
 		</div>
 	</Sidebar.Provider>

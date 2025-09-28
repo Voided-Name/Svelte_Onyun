@@ -1,31 +1,69 @@
 import type { ColumnDef } from '@tanstack/table-core';
 import type { LogItem } from './+page.server';
-
-const fmtDate = (iso: string | null) => {
-	if (!iso) return '—';
-	const d = new Date(iso);
-	if (Number.isNaN(d.getTime())) return iso;
-	return d.toLocaleString(undefined, {
-		year: 'numeric',
-		month: 'short',
-		day: '2-digit',
-		hour: '2-digit',
-		minute: '2-digit',
-		second: '2-digit'
-	});
-};
+import DataDateButton from './data-date-button.svelte';
+import { renderComponent } from '$lib/components/ui/data-table';
+import { dateRangeFilter } from '$lib/types/dateRange';
+import { userSearchFilter } from '$lib/types/userSearch';
+import { deviceSearchFilter } from '$lib/types/deviceSearch';
 
 export const columns: ColumnDef<LogItem>[] = [
 	{
-		id: 'loggedAt',
-		accessorFn: (row) => new Date(row.loggedAt ?? 0).getTime(),
-		cell: ({ row }) => fmtDate(row.original.loggedAt),
-		header: 'Time',
-		sortingFn: (a, b, id) => (a.getValue<number>(id) ?? 0) - (b.getValue<number>(id) ?? 0)
+		accessorKey: 'loggedAt',
+		header: ({ column }) =>
+			renderComponent(DataDateButton, {
+				onclick: column.getToggleSortingHandler(),
+				sorted: column.getIsSorted()
+			}),
+		cell: ({ getValue }) => {
+			const d = new Date(getValue<string>());
+			return d.toLocaleString('en-PH', { dateStyle: 'medium', timeStyle: 'short' });
+		},
+		filterFn: dateRangeFilter
 	},
-	{ accessorKey: 'username', header: 'User' },
-	{ accessorKey: 'deviceName', header: 'Device' },
-	{ accessorKey: 'entityType', header: 'Entity' },
-	{ accessorKey: 'action', header: 'Action' },
-	{ accessorKey: 'description', header: 'Description' }
+	{
+		id: 'user',
+		header: 'User',
+		accessorFn: (row) => row.username ?? String(row.userId ?? ''), // keeps sorting/filtering sensible
+		sortingFn: 'alphanumeric',
+		filterFn: userSearchFilter,
+		cell: ({ row }) => {
+			const name = row.original.username ?? '';
+			const id = row.original.userId ?? '';
+
+			if (name == '') {
+				return '---';
+			}
+
+			return `${name}  (id:${id})`;
+		}
+	},
+	{
+		id: 'device',
+		header: 'Device',
+		accessorFn: (row) => row.deviceName ?? String(row.deviceId ?? ''), // keeps sorting/filtering sensible
+		sortingFn: 'alphanumeric',
+		filterFn: deviceSearchFilter,
+		cell: ({ row }) => {
+			const name = row.original.deviceName ?? '';
+			const id = row.original.deviceId ?? '';
+
+			if (name == '') {
+				return '---';
+			}
+
+			return `${name}  (id:${id})`;
+		}
+	},
+	{
+		accessorKey: 'entityType',
+		header: 'Entity'
+	},
+	{
+		accessorKey: 'action',
+		header: 'Action'
+	},
+	{
+		accessorKey: 'description',
+		header: 'Description'
+	}
 ];

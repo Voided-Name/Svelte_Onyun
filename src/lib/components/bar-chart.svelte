@@ -278,8 +278,8 @@
 		</div>
 	</div>
 
-	<div class="mt-3 grid grid-cols-2 gap-3">
-		<div class="col-span-2 grid grid-cols-4 gap-3 rounded p-1">
+	<div class="mt-3">
+		<div class="grid grid-cols-2 gap-2 rounded p-1 sm:grid-cols-4">
 			<Button
 				variant={mq135 ? 'default' : 'outline'}
 				onclick={() => {
@@ -305,16 +305,21 @@
 				}}>MQ138</Button
 			>
 		</div>
-		<div class=" mt-1">
+	</div>
+
+	<div class="mt-3 grid grid-cols-1 gap-3 lg:grid-cols-2">
+		<div class="h-full">
 			<PieChart data={pieChartDataResponsive} />
 		</div>
-		<Card.Root class="max-w mt-1">
-			<Card.Header>
+
+		<Card.Root class="flex h-full flex-col">
+			<Card.Header class="pb-2">
 				<Card.Title>Average AUC</Card.Title>
 				<Card.Description>All Time</Card.Description>
 			</Card.Header>
-			<Card.Content>
-				<Chart.Container config={chartConfigResponsive}>
+
+			<Card.Content class="flex-1">
+				<Chart.Container config={chartConfigResponsive} class="h-[260px] w-full md:h-[320px]">
 					<BarChart
 						bind:context
 						data={chartDataResponsive}
@@ -331,7 +336,6 @@
 								stroke: 'none',
 								strokeWidth: 0,
 								rounded: 'all',
-								// use the height of the chart to animate the bars
 								initialY: context?.height,
 								initialHeight: 0,
 								motion: {
@@ -349,7 +353,8 @@
 					</BarChart>
 				</Chart.Container>
 			</Card.Content>
-			<Card.Footer></Card.Footer>
+
+			<Card.Footer />
 		</Card.Root>
 	</div>
 </div>

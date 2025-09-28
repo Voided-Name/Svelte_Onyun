@@ -85,7 +85,7 @@
 	});
 </script>
 
-<div class="grid grid-cols-4">
+<div class="grid grid-cols-4 gap-3">
 	<div class="py-4">
 		<Input
 			placeholder="Search first or last name…"

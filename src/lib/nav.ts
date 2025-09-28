@@ -18,7 +18,7 @@ export type ResolvedNavItem = {
 		| 'Users'
 		| 'Focus'
 		| 'Tags'
-		| 'Tractor'
+		| 'Database'
 		| 'Logs'
 		| 'ClipboardList';
 };
@@ -42,7 +42,7 @@ export function buildNav(perms: Set<Perm>, role?: Role): ResolvedNavItem[] {
 
 	if (perms.has('tags:crud')) items.push({ title: 'Tags', url: '/app/tags', icon: 'Tags' });
 
-	if (perms.has('data:view')) items.push({ title: 'Data', url: '/app/data', icon: 'Tractor' });
+	if (perms.has('data:view')) items.push({ title: 'Data', url: '/app/data', icon: 'Database' });
 
 	if (perms.has('logs:view'))
 		items.push({ title: 'System Logs', url: '/app/systemLogs', icon: 'Logs' });

@@ -5,6 +5,7 @@ import Users from '@lucide/svelte/icons/users';
 import Focus from '@lucide/svelte/icons/focus';
 import Tags from '@lucide/svelte/icons/tags';
 import Tractor from '@lucide/svelte/icons/tractor';
+import Database from '@lucide/svelte/icons/database';
 import Logs from '@lucide/svelte/icons/logs';
 import ClipboardList from '@lucide/svelte/icons/clipboard-list';
 import Settings from '@lucide/svelte/icons/settings';
@@ -24,7 +25,8 @@ export const ICONS = {
 	Settings,
 	LogOut, // you use this in NavSecondary
 	Frame,
-	Map
+	Map,
+	Database
 } as const;
 
 export type IconName = keyof typeof ICONS;

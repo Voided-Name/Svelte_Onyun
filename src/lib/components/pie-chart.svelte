@@ -20,7 +20,10 @@
 		<Card.Description>All Time</Card.Description>
 	</Card.Header>
 	<Card.Content class="flex-1">
-		<Chart.Container config={chartConfig} class="mx-auto aspect-square max-h-[250px]">
+		<Chart.Container
+			config={chartConfig}
+			class="mx-auto aspect-square h-[260px] w-full md:h-[320px]"
+		>
 			<PieChart
 				{data}
 				key="status"

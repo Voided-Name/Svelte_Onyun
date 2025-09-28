@@ -10,11 +10,11 @@
 	const id = $props.id();
 
 	let open = $state(false);
-	let { value = $bindable<DateValue | undefined>(undefined) } = $props();
+	let { value = $bindable<DateValue | undefined>(undefined), label = '' } = $props();
 </script>
 
 <div class="flex flex-col gap-3">
-	<Label for="{id}-date" class="px-1">Date of birth</Label>
+	<Label for="{id}-date" class="px-1">{label}</Label>
 	<Popover.Root bind:open>
 		<Popover.Trigger id="{id}-date">
 			{#snippet child({ props })}

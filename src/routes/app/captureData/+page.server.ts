@@ -14,7 +14,7 @@ export const load: PageServerLoad = async ({ fetch }) => {
 	const body = await response.json();
 	const devices: Device[] = body?.devices ?? [];
 
-	console.log('Devices: ', devices);
+	//console.log('Devices: ', devices);
 
 	const response2 = await fetch(`${API_URL}/onion/tags/view`);
 
@@ -25,7 +25,7 @@ export const load: PageServerLoad = async ({ fetch }) => {
 	const body2 = await response2.json();
 	const tags: Tag[] = body2?.tags ?? [];
 
-	console.log('Tags: ', tags);
+	//console.log('Tags: ', tags);
 
 	return { devices, apiUrl: API_URL, tags };
 };

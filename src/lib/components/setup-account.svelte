@@ -85,7 +85,7 @@
 				<Input id="lName" bind:value={lName} />
 			</div>
 			<div class="grid gap-2">
-				<DatePicker bind:value={dob} />
+				<DatePicker bind:value={dob} label="Date of Birth" />
 			</div>
 			<Dialog.Footer class="flex gap-2">
 				<Dialog.Close>

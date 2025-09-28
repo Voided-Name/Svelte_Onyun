@@ -31,7 +31,7 @@
 			</Card.Header>
 			<Card.Content class="pt-0">
 				<div class="max-h-72 space-y-2 overflow-auto pr-1">
-					{#each tags as t (t.tagId)}
+					{#each tags.filter((t) => !(tagFilters ?? []).includes(t.tagId)) as t (t.tagId)}
 						<Button
 							onclick={() => selectTag(t.tagId)}
 							variant={tagSelected === t.tagId ? 'default' : 'outline'}

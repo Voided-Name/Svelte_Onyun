@@ -22,6 +22,7 @@
 
 	async function editDevice() {
 		try {
+			console.log('Device: ');
 			console.log(device);
 			const res = await fetch(`/api/device/${device.id}`, {
 				method: 'PATCH',
